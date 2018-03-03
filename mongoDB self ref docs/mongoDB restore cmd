@@ -1,0 +1,103 @@
+
+go to the folder :(working)
+mongorestore dealsup(this is the folder which contains dumbs i.e cd dealsup)
+
+mongorestore -d pets /path/to/pets
+
+Import :
+mongodump -d pets -o petsbackup
+
+
+droping database:
+use dealsup  --go inside the DB
+db.dropDatabase();
+
+creating mongoDump:(working)
+
+goto the folder containg collections >mongodump
+
+========================================
+
+Installing redis
+
+sudo apt-get update
+
+sudo apt-get install build-essential
+
+sudo apt-get install tcl8.5
+
+wget http://download.redis.io/releases/redis-stable.tar.gz
+
+tar xzf redis-stable.tar.gz
+
+cd redis-stable
+ma
+make
+
+make test
+
+sudo make install
+
+cd utils
+
+sudo ./install_server.sh
+
+sudo service redis_6379 start
+
+sudo service redis_6379 stop
+
+--You can then access the redis database by typing the following command:
+
+redis-cli
+
+--You now have Redis installed and running. The prompt will look like this:
+
+redis 127.0.0.1:6379> 
+
+--To set Redis to automatically start at boot, run:
+
+sudo update-rc.d redis_6379 defaults
+
+
+
+START MONGO DB
+
+(venv)ashish-mywash@ashishmywash:~/mywash_code/boiler$ sudo service mongodb start
+
+
+==========================
+--UPSERT COMMAND:
+upsert
+An option for update operations. If set to true, the update operation will either update the first document matched by a query or insert a new document if none matches. The new document will have the fields implied by the operation. The update() and findAndModify() have the option
+
+result=db.orders.update({'_id':ObjectId(order_id)},{'$set':data},upsert=False, multi=False)
+
+
+The json module won't work due to things like the ObjectID.
+
+Luckily PyMongo provides json_util which ...
+
+... allow[s] for specialized encoding and decoding of BSON documents into Mongo Extended JSON's Strict mode. This lets you encode / decode BSON documents to JSON even when they use special BSON types.
+
+(venv)ashish-mywash@ashishmywash:~/mywash_code/boiler$ sudo service mongodb start
+
+REDIS
+ sudo ./install_server.sh
+
+sudo service redis_6379 start
+
+ashish-mywash@ashishmywash:~$ . venv/bin/activate
+(venv)ashish-mywash@ashishmywash:~$ cd mywash_code/
+(venv)ashish-mywash@ashishmywash:~/mywash_code$ cd boiler/
+(venv)ashish-mywash@ashishmywash:~/mywash_code/boiler$ python runserver.py
+local
+config is local
+[20150702-13:21PM] [_internal.py] [_log] [INFO]  * Running on http://0.0.0.0:5001/
+[20150702-13:21PM] [_internal.py] [_log] [INFO]  * Restarting with reloader
+local
+config is local
+
+
+
+
+

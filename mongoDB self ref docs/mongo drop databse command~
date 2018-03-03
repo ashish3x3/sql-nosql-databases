@@ -1,0 +1,20 @@
+Example:
+First, check the list available databases by using the command show dbs
+
+>show dbs
+local      0.78125GB
+mydb       0.23012GB
+test       0.23012GB
+>
+If you want to delete new database <mydb>, then dropDatabase() command would be as follows:
+
+>use mydb
+switched to db mydb
+>db.dropDatabase()
+>{ "dropped" : "mydb", "ok" : 1 }
+>
+Now check list of databases
+
+>show dbs
+local      0.78125GB
+test       0.23012GB

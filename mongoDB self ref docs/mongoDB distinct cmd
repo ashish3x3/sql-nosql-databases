@@ -1,0 +1,9 @@
+db.users.distinct("email").length;
+20010
+> db.users.find().count();
+21658
+
+Return an array of the distinct values of the field name from the documents in the profile collection where the age is greater than 25:
+
+db.runCommand ( { distinct: "profile", key: "name", query: { age: { $gt: 25 } } } )
+

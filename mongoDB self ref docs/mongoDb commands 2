@@ -1,0 +1,21 @@
+db.getCollectionNames();
+
+show collections
+
+show dbs 
+
+==============================
+adding new fields to all collections:
+
+db.orders.update({},{$set : {"service_type":""}},false,true);
+==========================
+to get most recent data enetred:
+
+db.orders.find().limit(1).sort({$natural:-1}).pretty();
+
+=========================
+
+creating mongoDump
+
+goto the folder containg collections >mongodump
+

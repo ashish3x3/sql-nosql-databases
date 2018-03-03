@@ -1,0 +1,121 @@
+In case you want to add a new_field to all your collection, you have to use empty selector, and set multi flag to true (last param) to update all the documents
+
+db.your_collection.update({},{$set : {"new_field":1}},false,true)
+
+In the above example last 2 fields false, true specifies the upsert and multi flags.
+
+Upsert: If set to true, creates a new document when no document matches the query criteria.
+
+Multi: If set to true, updates multiple documents that meet the query criteria. If set to false, updates one document.
+
+This is for Mongo versions prior to 2.2. For latest versions the query is changed a bit
+
+db.your_collection.update({},
+                          {$set : {"new_field":1}},
+                          {upsert:false,
+                          multi:true}) 
+
+db.myCollection.update({}, {$set: {"isOpen": false}}, false, true)
+
+
+=======================================================
+
+The $unset operator deletes a particular field. Consider the following syntax:
+
+{ $unset: { <field1>: "", ... } }
+
+db.products.update(
+   { sku: "unknown" },
+   { $unset: { quantity: "", instock: "" } }
+)
+
+==========================================================
+
+The $set operator replaces the value of a field with the specified value.
+
+{ $set: { <field1>: <value1>, ... } }
+
+db.products.update(
+   { _id: 100 },
+   { $set:
+      {
+        quantity: 500,
+        details: { model: "14Q3", make: "xyz" },
+        tags: [ "coats", "outerwear", "clothing" ]
+      }
+   }
+)
+
+=========================================
+/*
+In MongoDB, is it possible to update the value of a field using the value from another field? The equivalent SQL would be something like:
+
+UPDATE Person SET Name = FirstName + ' ' + LastName
+And the MongoDB pseudo-code would be:
+
+db.person.update( {}, { $set : { name : firstName + ' ' + lastName } );
+*/
+
+
+
+db.person.find().forEach(
+    function (elem) {
+        db.person.update(
+            {
+                _id: elem._id
+            },
+            {
+                $set: {
+                    name: elem.firstname + ' ' + elem.lastname
+                }
+            }
+        );
+    }
+);
+
+db.person.find().snapshot().forEach( function (hombre) {
+    hombre.name = hombre.firstName + ' ' + hombre.lastName; 
+    db.person.save(hombre); 
+});
+=================================================
+Update a field with a multiple of this value
+
+
+
+So, given { Price : 19.99 }
+
+I'd like to do db.collection.update({tag : "refurb"}, {$set {Price : Price * 0.50 }}, false, true)
+
+
+db.eval(function() { 
+    db.collection.find({tag : "refurb"}).forEach(function(e) {
+        e.Price = e.Price * 0.5;
+        db.collection.save(e);
+    });
+});
+
+In the new Mongo 2.6.x there is a $mul operator. It would multiply the value of the field by the number with the following syntax.
+
+{
+  field: { $mul: <number> }
+}
+So in your case you will need to do the following:
+
+db.collection.update(
+  { tag : "refurb"},
+  { $mul: { Price : 0.5 } }
+);
+
+=======================================================
+sETTING DEFAULTS IN MONGOdB:
+
+var userSchema = new Schema({ 
+    win: { type: Number, default: 0 }
+});
+
+======================================================
+
+
+
+
+

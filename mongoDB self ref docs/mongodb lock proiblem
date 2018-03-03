@@ -1,0 +1,9 @@
+you'd do is:
+
+Create and open a file named opscode.list:
+    sudo vim /etc/apt/sources.list.d/opscode.list
+Add the required line and save the file:
+    deb http://apt.opscode.com/ oneiric main
+The above steps can be combined to make a single command:
+
+sudo echo "deb http://apt.opscode.com/ onereic main" > /etc/apt/sources.list.d/opscode.list

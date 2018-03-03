@@ -1,0 +1,237 @@
+use mydatabse
+
+db.links  //create collection
+
+db.links.insert({.KEY:VALUE...});
+
+db.links.save(object of databse);
+
+differenc between save and insert:
+
+save() will check for if there is any _id assciated with inserted element if ther is then it wil perform an update intead of save eles it will save to databse..
+
+var obj={};
+
+obj.name="";
+obj.ckss="";
+
+obj.meta={};
+obj.meta.os="";
+obj.meta.server="";
+
+db.links.save(obj);
+
+db.links.find().foreach(printjson);
+
+mongo dosen't have any inyegrity check functions so it is extra work on programmer to chek for inserted data...
+
+==============
+
+IF YOU PROVIDE YOUR OWN _ID WITH THE MONGOdB it will not auto generate it..
+
+why mongo _id uses 12 byte value time the data was saved,host name the machine is running on, process id of the server process and a random incremant value.. and why not a single incremanting value as in relational databse...
+--becasue it is meant for clustering and difrent datatbse ..and this mechnism will make sure the number is random..
+
+aditionally  its _id can return the timetamp associted with the object data as it is stored in _id..
+
+db.links.find()[0]._id.getTimestamp()
+
+
+=====================
+
+How to create _id;
+
+1. use _id:new ObjectId..will creta randowm 12 byte alpha numeraic list string..which is not always readable... counter() will give an customozed id...
+
+2. use _id:counter(collection Name i.e links)..it will auto assifn and keep on incremanting it..
+
+e.g. db.products.insert({_id:counter("products"),nme:"p1"});
+	db.products.insert({_id:counter("products"),nme:"p2"});
+	db.products.insert({_id:counter("products"),nme:"p3"});
+
+we need not change the counter call in subsequent calls..
+
+db.products.find()...
+
+db.counter.find()....it will tell the current value of the counter _id..
+
+
+=========================================
+In relational DB we want normalized DB and in mosql wewnat denormalized Db..
+
+How to use foreign key concept in MongoDb?
+
+db.users.insert({name:"ashish"});
+
+var a=db.users.findone({name:"ashish"});
+
+>a
+("_id" : objectId..., name:"ashish")
+
+a._id ....will give objct ID..
+
+--insert in other collection wirh refernce..
+db.links.inset({title:"products", url:"http://ttt..com",
+		userID:a._id});
+
+now it is refrence to same user ID..
+
+link=db.link.find()[2]
+
+--return that user which has sane id as link.userId ahas..
+db.user.findOne({_id: link.userid});
+
+
+=========================
+
+when to denormalize the databse and when to use _id linking?
+
+depend on what your DB is used for ..iif it is read then denormalzi is better a it will optimoze the reaults for query..
+
+like our adding meta exaple with likswe acan lao ad the userID iffo in links but what if we want to change it..we have to find all 100 of userID and update it and in this king of situation linking usedID will come habdy as it will only update those userID without any linear search...
+
+use linking wjen more updates..
+
+================================
+db.users.drop(); //no error if dosen't exist
+db.links.drop();
+
+db.users.insert({name:(first:"john",last:"doe"),
+	age:30,
+email:'johndoe@gmail.com',
+logins:[ (at:new Date(012,5,6,7,8,9 ),minutes:21),
+	 (at:new Date(012,5,6,7,8,9 ),minutes:21)  ]
+});
+
+var u1=db.users.findOne({'name.first':'john' });
+
+db.links.insert({title:'Nettstuts',
+	url:'htp:,,,,',
+	userId:u1._id --whihc user created it.	}); 
+
+db.links.find({favourite :100}).forEach(printjson);
+
+d.users.find()--it return an cursor of elements...
+
+db.users.findOne() --it return an single element so you cn laso write.....db.users.findOne(..).name;
+
+--for selection which colimn to show..
+
+db.links.find({ttags:100},{tags:1,title:1,_id:0});
+don't show _id and only show tags and title..for excluding use 0/false...
+
+remember you can only include or exclude but not together mix ..only exception is _id:0 as it is by default so U can shut down but not others....either all inclusion one or all exclusion one....
+
+--quering for object inside an object:
+
+db.uers.find({'name.first':'john'},{'name.last':1});
+
+==========================================
+--how to write greter than ,smaller than etc queries...
+
+db.links.find({favourites: {$gt: 150},{tags:1,_id:0}});
+
+$lt: less than..
+$lte: less than equal to..
+$gte: gretaer than equal to..
+
+--multiple comdtion..
+
+db.links.find({favourites: {$gt: 150, $lt:300s},{tags:1,_id:0}});
+
+-- to query IN operator... whether it is in the specfic array or not..
+
+db.links.find({'name.first': { $in :['ash','man'] } },{...});
+
+--to find if all have mached wit given array: $all
+--all work on arry... it return which match all in arry..
+
+db.links.find({'name.first': { $all :['ash','man'] } },{...});
+
+
+--error:
+if you hit enetr an ellipses(...) come then it means mongo is expecting some more command or it means you have made saome syntax mistakes and mngo is still waiting fot it closing...
+
+--Not Equal $ne:
+
+db.link.find({tags: {$ne:'code'}});
+
+
+--Boolean operator:
+
+db.users.find($or [{'name.first':'john'},{'name.last':''ash}]);
+
+--$nor: all must not match..not only one..for nor..
+db.users.find($nor [{'name.first':'john'},{'name.last':''ash}]);
+
+--$and operator..
+
+db.users.find($and [{'name.first':'john'},{'name.last':''ash}]);
+
+
+=====================
+
+$exists: return all field that have particulat field..exixtes(true) or not exits(false)
+
+db.users.find({email: {$exists:true}}, {...});
+
+db.users.find({email: {$exists:false}}, {...});
+
+
+--not operator : negate result of other operator..
+
+--$mod operator:
+tose favroutes which are ddixible by 5..
+	db.links.find({favourites: {$mod: [5,0]}});
+
+--thise which rare nnot divisible by 5..
+using $not to nagte result
+
+db.links.find({favourites: {$not: {$mod: [5,0]}}});
+
+$elemmatch operator:
+
+when you haev an array of more complex objects.. to match an element inside a specfic array..
+
+--query to find uers based on their login time and for howlonf they were logged in..
+
+--this will match users who ahev logn minuts of 20 min..
+
+db.users.find({logins: {$elemMatch: {minutes:20} }},{...});
+
+--all uses who logged in before provided data..
+
+db.users.find({logins:{$elemMatch: {at : {$lt : new Date(2012,3,30)}} }},{...});
+
+
+--$where operator:
+
+db.users.find({$where :'name'=== "john"}); which is same as
+
+db.users.find('name'=== "john");  which is same as
+
+var f= function(){return this.name.first==="john"};
+
+db.users.find(f);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

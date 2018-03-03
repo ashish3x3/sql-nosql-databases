@@ -1,0 +1,28 @@
+missing_phone_logs
+
+general_logs
+
+exception_logs
+
+
+info,warning,error,critical,exception
+
+sort = {'_id': -1}
+db.exception_logs.find({}, limit=10).sort({'_id': -1})
+
+db.orders.find({}, limit=10).sort({'timestamp': -1}).pretty();
+
+to get most recent data enetred:
+
+db.orders.find().limit(1).sort({$natural:-1}).pretty();
+
+--accurate:
+db.orders.find({}, limit=1).sort({'_id': -1}).pretty();
+
+db.schedules.find({'assigned_to': {'$exists': 1}}).limit(1).sort({$natural:-1}).pretty();
+
+"assigned_to" : "557d05c9da12860547e5f60e"
+
+
+
+

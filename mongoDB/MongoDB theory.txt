@@ -1,0 +1,44 @@
+mongoDB data is stored in bson and not json...which is like json 
+
+we save data for retore not in text fromat but binary sa we use dumb command..
+
+and to resore data from dumb we use mongo.restore() command
+
+
+mongostat gives the info about runing mongo inatnces.
+
+BSON is JSON with 2 aditional ype : it has some extra datatype apart from JS and second its not raw test data..
+
+
+================
+
+collection is like a table but with no schema..i.e data in database may not need to be related..but that dosen't make sense..
+
+Document : same like  row in sql...
+
+Field : same like columen in sql : {key : value}...
+
+
+=========================
+
+
+intresting thing about mongo is that when we swuitch to a database in it it will not create it untill we start storing daat in it...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
